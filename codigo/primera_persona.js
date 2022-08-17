@@ -185,21 +185,21 @@ THREE.FirstPersonControls = function ( camera, MouseMoveSensitivity = 0.002, spe
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-var instructions = document.querySelector("#instructions");
+var Instrucciones = document.querySelector("#Instrucciones");
 var havePointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
 if ( havePointerLock ) {
   var element = document.body;
   var pointerlockchange = function ( event ) {
     if ( document.pointerLockElement === element || document.mozPointerLockElement === element || document.webkitPointerLockElement === element ) {
       controls.enabled = true;
-      instructions.style.display = 'none';
+      Instrucciones.style.display = 'none';
     } else {
       controls.enabled = false;
-      instructions.style.display = '-webkit-box';
+      Instrucciones.style.display = '-webkit-box';
     }
   };
   var pointerlockerror = function ( event ) {
-    instructions.style.display = 'none';
+    Instrucciones.style.display = 'none';
   };
 
   document.addEventListener( 'pointerlockchange', pointerlockchange, false );
@@ -209,7 +209,7 @@ if ( havePointerLock ) {
   document.addEventListener( 'mozpointerlockerror', pointerlockerror, false );
   document.addEventListener( 'webkitpointerlockerror', pointerlockerror, false );
 
-  instructions.addEventListener( 'click', function ( event ) {
+  Instrucciones.addEventListener( 'click', function ( event ) {
     element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock || element.webkitRequestPointerLock;
     if ( /Firefox/i.test( navigator.userAgent ) ) {
       var fullscreenchange = function ( event ) {
@@ -228,7 +228,7 @@ if ( havePointerLock ) {
     }
   }, false );
 } else {
-  instructions.innerHTML = 'Your browser not suported PointerLock';
+  Instrucciones.innerHTML = 'Your browser not suported PointerLock';
 }
 
 var camera, scene, renderer, controls, raycaster, arrow, world;
@@ -283,6 +283,7 @@ function init() {
   controls = new THREE.FirstPersonControls( camera );
   scene.add( controls.getObject() );
 
+  // ================================================================= EDITABLE =================================================================
   // floor
 
   var floorGeometry = new THREE.PlaneBufferGeometry( 2000, 2000, 100, 100 );
@@ -318,6 +319,8 @@ function init() {
   }
   
   scene.add( world );
+
+  // ================================================================= EDITABLE =================================================================
 
 }
 
