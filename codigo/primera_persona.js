@@ -11,7 +11,7 @@ THREE.FirstPersonControls = function ( camera, MouseMoveSensitivity = 0.002, spe
   var moveBackward = false;
   var moveLeft = false;
   var moveRight = false;
-  var canJump = false;
+  //var canJump = false;
   var run = false;
   
   var velocity = new THREE.Vector3();
@@ -30,6 +30,7 @@ THREE.FirstPersonControls = function ( camera, MouseMoveSensitivity = 0.002, spe
 
   var PI_2 = Math.PI / 2;
 
+  // Movimiento de camara
   var onMouseMove = function ( event ) {
 
     if ( scope.enabled === false ) return;
@@ -44,6 +45,7 @@ THREE.FirstPersonControls = function ( camera, MouseMoveSensitivity = 0.002, spe
 
   };
 
+  // Movimiento de personaje
   var onKeyDown = (function ( event ) {
     
     if ( scope.enabled === false ) return;
@@ -74,9 +76,9 @@ THREE.FirstPersonControls = function ( camera, MouseMoveSensitivity = 0.002, spe
       //   canJump = false;
       //   break;
 
-      // case 16: // shift
-      //   run = true;
-      //   break;
+      case 16: // shift
+        run = true;
+        break;
 
     }
 
@@ -130,15 +132,15 @@ THREE.FirstPersonControls = function ( camera, MouseMoveSensitivity = 0.002, spe
     document.removeEventListener( 'mousemove', onMouseMove, false );
     document.removeEventListener( 'keydown', onKeyDown, false );
     document.removeEventListener( 'keyup', onKeyUp, false );
-    // document.removeEventListener( 'mousedown', onMouseDownClick, false );
-    // document.removeEventListener( 'mouseup', onMouseUpClick, false );
+    document.removeEventListener( 'mousedown', onMouseDownClick, false );
+    document.removeEventListener( 'mouseup', onMouseUpClick, false );
   };
 
   document.addEventListener( 'mousemove', onMouseMove, false );
   document.addEventListener( 'keydown', onKeyDown, false );
   document.addEventListener( 'keyup', onKeyUp, false );
-  // document.addEventListener( 'mousedown', onMouseDownClick, false );
-  // document.addEventListener( 'mouseup', onMouseUpClick, false );
+  document.addEventListener( 'mousedown', onMouseDownClick, false );
+  document.addEventListener( 'mouseup', onMouseUpClick, false );
 
   scope.enabled = false;
 
@@ -245,12 +247,14 @@ function init() {
   world = new THREE.Group();
   
   raycaster = new THREE.Raycaster(camera.getWorldPosition(new THREE.Vector3()), camera.getWorldDirection(new THREE.Vector3()));
-  arrow = new THREE.ArrowHelper(camera.getWorldDirection(new THREE.Vector3()), camera.getWorldPosition(new THREE.Vector3()), 3, 0x000000 );
+  //arrow = new THREE.ArrowHelper(camera.getWorldDirection(new THREE.Vector3()), camera.getWorldPosition(new THREE.Vector3()), 3, 0x000000 );
+
 
   scene = new THREE.Scene();
   scene.background = new THREE.Color( 0xffffff );
-  scene.fog = new THREE.Fog( 0xffffff, 0, 2000 );
-  //scene.fog = new THREE.FogExp2 (0xffffff, 0.007);
+  // Niebla
+  // scene.fog = new THREE.Fog( 0xffffff, 0, 2000 );
+  // scene.fog = new THREE.FogExp2 (0xffffff, 0.007);
 
   renderer = new THREE.WebGLRenderer( { antialias: true } );
   renderer.setPixelRatio( window.devicePixelRatio );
@@ -262,13 +266,14 @@ function init() {
 
   window.addEventListener( 'resize', onWindowResize, false );
 
+  // Sombras
   var light = new THREE.HemisphereLight( 0xeeeeff, 0x777788, 0.75 );
   light.position.set( 0, 100, 0.4 );
   scene.add( light );
 
   var dirLight = new THREE.SpotLight( 0xffffff, .5, 0.0, 180.0);
   dirLight.color.setHSL( 0.1, 1, 0.95 );
-  dirLight.position.set(0, 300, 100);
+  dirLight.position.set(100, 400, 100);
   dirLight.castShadow = true;
   dirLight.lookAt(new THREE.Vector3());
   scene.add( dirLight );
@@ -277,30 +282,32 @@ function init() {
   dirLight.shadow.mapSize.height = 4096;
   dirLight.shadow.camera.far = 3000;
 
-  //var dirLightHeper = new THREE.SpotLightHelper( dirLight, 10 );
+  var dirLightHeper = new THREE.SpotLightHelper( dirLight, 10 );
   //scene.add( dirLightHeper );
 
   controls = new THREE.FirstPersonControls( camera );
   scene.add( controls.getObject() );
 
   // ================================================================= EDITABLE =================================================================
-  // floor
+  // Piso
+  crearFondo([2000,2000], [0,0,0], [90,0,0], 'https://previews.123rf.com/images/kolotuschenko/kolotuschenko1709/kolotuschenko170900006/85260697-textura-de-arena-marr%C3%B3n-para-el-fondo-primer-plano-de-la-playa-de-arena-vista-superior.jpg', [10,10]);
 
-  var floorGeometry = new THREE.PlaneBufferGeometry( 2000, 2000, 100, 100 );
-  var floorMaterial = new THREE.MeshLambertMaterial();
-  floorMaterial.color.setHSL( 0.095, 1, 0.75 );
+  // Techo
+  crearFondo([2000,2000], [0,0,-1000], [90,0,0], 'techo.jpg', [1,1]);
 
-  var floor = new THREE.Mesh( floorGeometry, floorMaterial );
-  floor.rotation.x = - Math.PI / 2;
-  floor.receiveShadow = true;
-  world.add(floor);
+
+  // Fondo
+  crearFondo([2000,1000], [0,500,1000], [0,90,0], 'https://cdna.artstation.com/p/assets/images/images/011/624/190/large/tyler-smith-reef14.jpg?1530547334', [1,1]);
+  crearFondo([2000,1000], [0,500,1000], [0,-90,0], 'https://cdna.artstation.com/p/assets/images/images/011/624/190/large/tyler-smith-reef14.jpg?1530547334', [1,1]);
+  crearFondo([2000,1000], [0,500,1000], [0,180,0], 'https://cdna.artstation.com/p/assets/images/images/011/624/190/large/tyler-smith-reef14.jpg?1530547334', [1,1]);
+  crearFondo([2000,1000], [0,500,1000], [0,0,0], 'https://cdna.artstation.com/p/assets/images/images/011/624/190/large/tyler-smith-reef14.jpg?1530547334', [1,1]);
 
   // objects
 
-  var boxGeometry = new THREE.BoxBufferGeometry( 1, 1, 1 );
-  boxGeometry.translate( 0, 0.5, 0 );
+  var boxGeometry = new THREE.ConeGeometry( 20, 100, 32 );
+  boxGeometry.translate( 0, 20, 0 );
 
-  for ( var i = 0; i < 500; i ++ ) {
+  for ( var i = 0; i < 400; i ++ ) {
 
     var boxMaterial = new THREE.MeshStandardMaterial( { color: Math.random() * 0xffffff, flatShading: false, vertexColors: false } );
 
@@ -308,20 +315,38 @@ function init() {
     mesh.position.x = Math.random() * 1600 - 800;
     mesh.position.y = 0;
     mesh.position.z = Math.random() * 1600 - 800;
-    mesh.scale.x = 20;
-    mesh.scale.y = Math.random() * 80 + 10;
-    mesh.scale.z = 20;
+    mesh.scale.x = Math.random() * 2;
+    mesh.scale.y = Math.random() * 2;
+    mesh.scale.z = Math.random() * 2;
     mesh.castShadow = true;
     mesh.receiveShadow = true;
-    mesh.updateMatrix();
-    mesh.matrixAutoUpdate = false;
+    //mesh.updateMatrix();
+    //mesh.matrixAutoUpdate = false;
     world.add(mesh);
   }
   
   scene.add( world );
 
   // ================================================================= EDITABLE =================================================================
+}
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function crearFondo(tamanio,traslacion,rotacion,imagen,repeat) {
+  geometriaPlano = new THREE.PlaneGeometry(tamanio[0], tamanio[1], 10, 10);
+  texturaPlano = new THREE.TextureLoader().load(imagen);
+  texturaPlano.wrapS = texturaPlano.wrapT = THREE.RepeatWrapping;
+  texturaPlano.repeat.set(repeat[0], repeat[1]);
+
+  materialPlano = new THREE.MeshBasicMaterial({ map: texturaPlano, side: THREE.DoubleSide });
+  terreno = new THREE.Mesh(geometriaPlano, materialPlano);
+  terreno.rotation.x = rotacion[0]*(Math.PI/180);
+  terreno.rotation.y = rotacion[1]*(Math.PI/180);
+  terreno.rotation.z = rotacion[2]*(Math.PI/180);
+  terreno.translateX(traslacion[0]); 
+  terreno.translateY(traslacion[1]);
+  terreno.translateZ(traslacion[2]);
+  scene.add(terreno);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -337,6 +362,7 @@ function onWindowResize() {
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// Actualziar controles
 function animate() {
 
   requestAnimationFrame( animate );
@@ -346,138 +372,9 @@ function animate() {
     controls.update();
 
     raycaster.set(camera.getWorldPosition(new THREE.Vector3()), camera.getWorldDirection(new THREE.Vector3()));
-    scene.remove ( arrow );
-    arrow = new THREE.ArrowHelper(raycaster.ray.direction, raycaster.ray.origin, 5, 0x000000 );
-    scene.add( arrow );
-
-    if (controls.click === true) {
-
-      var intersects = raycaster.intersectObjects(world.children);
-
-      if ( intersects.length > 0 ) {
-        var intersect = intersects[ 0 ];
-        makeParticles(intersect.point);
-      }
-    }
-
-    if (particles.length > 0) {
-      var pLength = particles.length;
-      while (pLength--) {
-        particles[pLength].prototype.update(pLength);
-      }
-    }
-
   }
 
   renderer.render( scene, camera );
-
-}
-
-var particles = new Array();
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-function makeParticles(intersectPosition){
-  var totalParticles = 80;
-  
-  var pointsGeometry = new THREE.Geometry();
-  pointsGeometry.oldvertices = [];
-  var colors = [];
-  for (var i = 0; i < totalParticles; i++) {
-    var position = randomPosition(Math.random());
-    var vertex = new THREE.Vector3(position[0], position[1] , position[2]);
-    pointsGeometry.oldvertices.push([0,0,0]);
-    pointsGeometry.vertices.push(vertex);
-
-    var color = new THREE.Color(Math.random() * 0xffffff);
-    colors.push(color);
-  }
-  pointsGeometry.colors = colors;
-
-  var pointsMaterial = new THREE.PointsMaterial({
-    size: .8,
-    sizeAttenuation: true,
-    depthWrite: true,
-    blending: THREE.AdditiveBlending,
-    transparent: true,
-    vertexColors: THREE.VertexColors
-  });
-
-  var points = new THREE.Points(pointsGeometry, pointsMaterial);
-
-  points.prototype = Object.create(THREE.Points.prototype);
-  points.position.x = intersectPosition.x;
-  points.position.y = intersectPosition.y;
-  points.position.z = intersectPosition.z;
-  points.updateMatrix();
-  points.matrixAutoUpdate = false;
-
-  points.prototype.constructor = points;
-  points.prototype.update = function(index) {
-    var pCount = this.constructor.geometry.vertices.length;
-	  var positionYSum = 0;
-    while(pCount--) {
-      var position = this.constructor.geometry.vertices[pCount];
-      var oldPosition = this.constructor.geometry.oldvertices[pCount];
-
-      var velocity = {
-        x: (position.x - oldPosition[0] ),
-        y: (position.y - oldPosition[1] ),
-        z: (position.z - oldPosition[2] )				
-      }
-
-      var oldPositionX = position.x;
-      var oldPositionY = position.y;
-      var oldPositionZ = position.z;
-
-      position.y -= .03; // gravity
-
-      position.x += velocity.x;
-      position.y += velocity.y;
-      position.z += velocity.z;
-      
-      var wordlPosition = this.constructor.position.y + position.y;
-      
-      if (wordlPosition <= 0) {
-        //particle touched the ground
-        oldPositionY = position.y;
-        position.y = oldPositionY - (velocity.y * .3);
-		
-		    positionYSum += 1;
-      }
-
-      this.constructor.geometry.oldvertices[pCount] = [oldPositionX, oldPositionY, oldPositionZ];
-    }
-	
-    pointsGeometry.verticesNeedUpdate = true;
-	
-    if (positionYSum >= totalParticles) {
-      particles.splice(index, 1);
-	    scene.remove(this.constructor);
-      console.log('particle removed');
-    }
-
-  };
-  particles.push( points );
-  scene.add(points);
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-function randomPosition(radius) {
-  radius = radius * Math.random();
-  var theta = Math.random() * 2.0 * Math.PI;
-  var phi = Math.random() * Math.PI;
-
-  var sinTheta = Math.sin(theta); 
-  var cosTheta = Math.cos(theta);
-  var sinPhi = Math.sin(phi); 
-  var cosPhi = Math.cos(phi);
-  var x = radius * sinPhi * cosTheta;
-  var y = radius * sinPhi * sinTheta;
-  var z = radius * cosPhi;
-
-  return [x, y, z];
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
