@@ -291,27 +291,24 @@ function init() {
   // ================================================================= EDITABLE =================================================================
   // Piso
   crearFondo([2000,2000], [0,0,0], [90,0,0], 'https://previews.123rf.com/images/kolotuschenko/kolotuschenko1709/kolotuschenko170900006/85260697-textura-de-arena-marr%C3%B3n-para-el-fondo-primer-plano-de-la-playa-de-arena-vista-superior.jpg', [10,10]);
-
   // Techo
   crearFondo([2000,2000], [0,0,-1000], [90,0,0], 'techo.jpg', [1,1]);
-
-
   // Fondo
-  crearFondo([2000,1000], [0,500,1000], [0,90,0], 'https://cdna.artstation.com/p/assets/images/images/011/624/190/large/tyler-smith-reef14.jpg?1530547334', [1,1]);
-  crearFondo([2000,1000], [0,500,1000], [0,-90,0], 'https://cdna.artstation.com/p/assets/images/images/011/624/190/large/tyler-smith-reef14.jpg?1530547334', [1,1]);
-  crearFondo([2000,1000], [0,500,1000], [0,180,0], 'https://cdna.artstation.com/p/assets/images/images/011/624/190/large/tyler-smith-reef14.jpg?1530547334', [1,1]);
-  crearFondo([2000,1000], [0,500,1000], [0,0,0], 'https://cdna.artstation.com/p/assets/images/images/011/624/190/large/tyler-smith-reef14.jpg?1530547334', [1,1]);
+  crearFondo([2000,1000], [0,500,1000], [0,90,0], 'bajomar1.jpg', [1,1]);
+  crearFondo([2000,1000], [0,500,1000], [0,180,0], 'bajomar2.jpg', [1,1]);
+  crearFondo([2000,1000], [0,500,1000], [0,270,0], 'bajomar3.jpg', [1,1]);
+  crearFondo([2000,1000], [0,500,1000], [0,0,0], 'bajomar4.jpg', [1,1]);
 
   // objects
 
-  var boxGeometry = new THREE.ConeGeometry( 20, 100, 32 );
-  boxGeometry.translate( 0, 20, 0 );
+  var Geometry = new THREE.ConeGeometry( 20, 100, 32 );
+  Geometry.translate( 0, 20, 0 );
 
   for ( var i = 0; i < 400; i ++ ) {
 
-    var boxMaterial = new THREE.MeshStandardMaterial( { color: Math.random() * 0xffffff, flatShading: false, vertexColors: false } );
+    var Material = new THREE.MeshStandardMaterial( { color: Math.random() * 0xffffff, flatShading: false, vertexColors: false } );
 
-    var mesh = new THREE.Mesh( boxGeometry, boxMaterial );
+    var mesh = new THREE.Mesh( Geometry, Material );
     mesh.position.x = Math.random() * 1600 - 800;
     mesh.position.y = 0;
     mesh.position.z = Math.random() * 1600 - 800;
@@ -324,7 +321,6 @@ function init() {
     //mesh.matrixAutoUpdate = false;
     world.add(mesh);
   }
-  
   scene.add( world );
 
   // ================================================================= EDITABLE =================================================================
@@ -405,3 +401,5 @@ window.onload = function() {
     camera.updateProjectionMatrix();
   });
 };
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
